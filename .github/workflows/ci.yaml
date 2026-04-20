@@ -12,11 +12,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Login to Azure Container Registry
+      # 🔍 Debug (to confirm secrets are loaded)
+      - name: Debug Secrets
+        run: |
+          echo "LOGIN_SERVER=${{ secrets.ACR_LOGIN_SERVER }}"
+          echo "USERNAME=${{ secrets.ACR_USERNAME }}"
+          echo "PASSWORD SET=${{ secrets.ACR_PASSWORD != '' }}"
+
+      # 🔐 Login to Azure Container Registry
+      - name: Login to ACR
         run: docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }}
 
+      # 🐳 Build Docker Image
       - name: Build Docker Image
         run: docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/ai-campus:latest -f docker/Dockerfile .
 
+      # 📤 Push Image to ACR
       - name: Push Docker Image
         run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/ai-campus:latest
