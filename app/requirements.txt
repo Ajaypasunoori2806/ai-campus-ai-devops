@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-dotenv
+openai
+pytesseract
+Pillow
+pytest
+httpx
+python-multipart
+prometheus-fastapi-instrumentator
