@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: ai-campus-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ai-campus
