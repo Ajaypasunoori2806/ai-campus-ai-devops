@@ -1,8 +1,8 @@
 from fastapi import APIRouter, UploadFile, File
 from pydantic import BaseModel
-from app.services.ai_engine import get_ai_response
-from app.services.ocr import extract_text
-from app.services.memory import Memory
+from services.ai_engine import get_ai_response
+from services.ocr import extract_text
+from services.memory import Memory
 
 router = APIRouter()
 memory = Memory()

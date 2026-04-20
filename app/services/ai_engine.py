@@ -1,8 +1,14 @@
 from openai import OpenAI
-from app.config import OPENAI_API_KEY
-from app.data.college_data import college_data
+import os
+from config import OPENAI_API_KEY
+from data.college_data import college_data
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+# Get API key from env or config
+api_key = os.getenv("OPENAI_API_KEY") or OPENAI_API_KEY
+
+# Initialize client only if key exists
+client = OpenAI(api_key=api_key) if api_key else None
+
 
 def get_ai_response(message, context):
     prompt = f"""
@@ -21,11 +27,18 @@ User question:
 Answer clearly and helpfully like a real assistant.
 """
 
+    # Handle missing API key (important for Docker/CI)
+    if client is None:
+        return "AI service not configured (missing API key)"
+
     try:
         response = client.chat.completions.create(
             model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": prompt}]
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
         )
         return response.choices[0].message.content.strip()
-    except Exception:
+
+    except Exception as e:
         return "AI service is currently unavailable"
