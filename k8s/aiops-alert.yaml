@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: aiops-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: aiops.rules
+    rules:
+    - alert: PodRestartHigh
+      expr: increase(kube_pod_container_status_restarts_total[1m]) > 1
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Pod restarting frequently"

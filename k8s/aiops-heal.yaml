@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: aiops-healer
+  namespace: default
+spec:
+  schedule: "*/2 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: healer
+            image: bitnami/kubectl
+            command:
+              - /bin/sh
+              - -c
+              - kubectl rollout restart deployment ai-campus-deployment
+          restartPolicy: OnFailure
